@@ -1,0 +1,6 @@
+requests
+kostalpiko
+#kostalpyko
+paho-mqtt
+
+
