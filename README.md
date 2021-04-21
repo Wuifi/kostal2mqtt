@@ -18,7 +18,7 @@ http://www.steves-internet-guide.com/into-mqtt-python-client/
 
 https://github.com/svijee/kostal-dataexporter (for cotainerization)
 
-http://<KOSTAL_HOST>/index.fhtml
+
 
 ## Setup
 
@@ -26,26 +26,37 @@ http://<KOSTAL_HOST>/index.fhtml
 From IT_Security Point-of-View, the whole script might be a nightmare!
 Feel free to enhance and contribute!
 
-### Set environment variables with the relevant details
+### Verify access to inverter
+As a first step, try to get access with the user credentials to the Inverter frontend with the following Link from your browser:
+http://<KOSTAL_HOST>/index.fhtml
+
+### Set environment variables with the relevant details (e.g. via docker-compose)
 * For Interface to KOSTAL Inverter
   * `KOSTAL_USERNAME`= `"<pvserver>"`
   * `KOSTAL_PASSWORD`= `"<your_password>"`
   * `KOSTAL_HOST`= `"<IP-address>"`
 * For MQTT Broker:
   * `MQTT_TOPIC` = `"KOSTAL"`
-  * `MQTT_HOST` =`"192.168.177.100"`
+  * `MQTT_HOST` =`"127.0.0.1"`
+  * `MQTT_USERNAME`=`<your_username>`  < Runs currently without authentification!
+  * `MQTT_PASSWORD`=`<your_password>`  < Runs currently without authentification!
+
+### Internal variables, that can be easily added to the environment variables as well:  
   * `MQTT_PORT`=`1883`
   * `MQTT_CLIENT_ID`=`""`
   * `MQTT_KEEPALIVE`=`60`
   * `MQTT_WILL`=`None`
-  * `MQTT_AUTH`=`None`
   * `MQTT_TLS`=`None`
+  * `SCRAPE_INTERVAL`
 
 ### create docker container
 building the container
 `sudo docker build -t kostal2mqtt .`
 
 `sudo docker run kostal2mqtt`
+
+building the container with docker-compose
+`docker-compose up`
 
  * Run `python kostal2mqtt.py`
 
@@ -58,12 +69,14 @@ There's also a Docker Image available on [Docker Hub](https://hub.docker.com/rep
 - create mqtt message
 - publish message
 
+## Missing features:
 - exception handling  **not yet implemented**
   - connection errors
     - route to PV
     - route to MQTT Broker
   - data inconsistency
   - etc. etc.
+- interface to docker logging console
 
 ## Problems to be solved:
 - Docker container environment ==> 
@@ -75,8 +88,7 @@ There's also a Docker Image available on [Docker Hub](https://hub.docker.com/rep
 ### Grafana
 
 By logging the data with this script it's easily possible to create a nice
-Grafana Dashboard to display some of the interesting data:
-to use it in your Grafana instance.
+Grafana Dashboard to display some of the interesting data.
 
 ### NODE-RED
 **... to be developped**
