@@ -1,37 +1,41 @@
 #!/usr/bin/env python3
 
-#import os
+import os
 import json
 import time
 from kostalpiko.kostalpiko import Piko
-#from kostalpyko.kostalpyko import Piko #<= diese version funktioniert!
+#from kostalpyko.kostalpyko import Piko #<= dieses package funktioniert auch!
 #!pip install paho-mqtt
 #pip --version
 import paho.mqtt.client as mqtt
 mqttc = mqtt.Client()
 import paho.mqtt.publish as publish
 
-## User Config
-KOSTAL_USERNAME='pvserver' # os.environ.get('KOSTAL_USERNAME')
-KOSTAL_PASSWORD='mcguire49' # os.environ.get('KOSTAL_PASSWORD')
-KOSTAL_HOST='http://192.168.178.110' # os.environ.get('KOSTAL_HOST')
+## User Config from Environmental variables:
+kostal_host='http://'+ os.environ.get('KOSTAL_HOST')
+kostal_username= os.environ.get('KOSTAL_USERNAME')
+kostal_password= os.environ.get('KOSTAL_PASSWORD')
+mqtt_topic= os.environ.get('MQTT_TOPIC')
+mqtt_host= os.environ.get('MQTT_HOST')
+mqtt_username= os.environ.get('MQTT_USERNAME')
+mqtt_password= os.environ.get('MQTT_PASSWORD')
 
-MQTT_TOPIC="KOSTAL" # os.environ.get('MQTT_TOPIC')
-MQTT_HOST="192.168.177.100" # os.environ.get('MQTT_TOPIC')
-MQTT_PORT=1883 # os.environ.get('MQTT_TOPIC')
-MQTT_CLIENT_ID="" # os.environ.get('MQTT_CLIENT_ID')
-MQTT_KEEPALIVE=60 # os.environ.get('MQTT_KEEPALIVE')
-MQTT_WILL=None # os.environ.get('MQTT_WILL')
-MQTT_AUTH=None # os.environ.get('MQTT_AUTH')
-MQTT_TLS=None # os.environ.get('MQTT_TLS')
+## Internal variables
+mqtt_port=1883 # os.environ.get('MQTT_PORT')
+mqtt_client_id="" # os.environ.get('MQTT_CLIENT_ID')
+mqtt_keepalive=60 # os.environ.get('MQTT_KEEPALIVE')
+mqtt_will=None # os.environ.get('MQTT_WILL')
 
-SCRAPE_INTERVAL=10 # os.environ.get('SCRAPE_INTERVAL')
+mqtt_auth=None # (mqtt_username,mqtt_password)
+mqtt_tls=None # os.environ.get('MQTT_TLS')
+
+scrape_interval=10 # os.environ.get('SCRAPE_INTERVAL')
 
 
 ## get data
 #create a new piko instance
 #p = Piko('host', 'username', 'password')
-p = Piko(KOSTAL_HOST,KOSTAL_USERNAME,KOSTAL_PASSWORD)
+p = Piko(kostal_host,kostal_username,kostal_password)
 
 ## convert data 2 json
 def raw2json(raw):
@@ -114,9 +118,9 @@ def convert_to_mqtt_msg(topic,dict_input):
 while True:
     raw_content=p._get_raw_content()
     jsonData=raw2json(raw_content)
-    MQTT_msg=convert_to_mqtt_msg(MQTT_TOPIC,jsonData)
+    MQTT_msg=convert_to_mqtt_msg(mqtt_topic,jsonData)
     msgs = [MQTT_msg]
-    publish.multiple(msgs, hostname=MQTT_HOST,
-                     port=MQTT_PORT, client_id=MQTT_CLIENT_ID, keepalive=MQTT_KEEPALIVE, will=MQTT_WILL, auth=MQTT_AUTH, tls=MQTT_TLS,
+    publish.multiple(msgs, hostname=mqtt_host,
+                     port=mqtt_port, client_id=mqtt_client_id, keepalive=mqtt_keepalive, will=mqtt_will, auth=mqtt_auth, tls=mqtt_tls,
                      protocol=mqtt.MQTTv311, transport="tcp")
-    time.sleep(SCRAPE_INTERVAL)
+    time.sleep(scrape_interval)
