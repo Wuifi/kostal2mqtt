@@ -1,4 +1,8 @@
-requests
+
+httpretty
+httplib2
+lxml
+setuptools
 kostalpiko
 #kostalpyko
 paho-mqtt
