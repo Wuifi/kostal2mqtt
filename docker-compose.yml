@@ -1,38 +1,21 @@
-version: '3.3'
+version: '3'
 services:
   kostal:
-    build: .
-      #context: '.'
-      #dockerfile: ./Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
       #args:
       #  - NB_USER=appuser
       #  - NB_UID=1001
       #  - NB_GID=101
-    image: kostal2mqtt:latest
+    #image: kostal2mqtt:latest
     #image: wolfi82/kostal2mqtt:latest
     container_name: kostal2mqtt
     restart: unless-stopped
     user: "0"
-    #privileged: true
-    #ports:
-    #- "3000:3000"
-    environment:
-    # For Interface to KOSTAL Inverter
-    - KOSTAL_USERNAME=pvserver
-    - KOSTAL_PASSWORD=mcguire49
-    - KOSTAL_HOST=192.168.178.110 
-  # For MQTT Broker:
-    - MQTT_TOPIC=KOSTAL
-    - MQTT_HOST=192.168.177.100
-    - MQTT_USERNAME=
-    - MQTT_PASSWORD=
-    #- MQTT_PORT=1883
-    #- MQTT_CLIENT_ID= #empty string!?
-    #- MQTT_KEEPALIVE=60
-    #- MQTT_WILL=None
-    #- MQTT_AUTH=None
-    #- MQTT_TLS=None
-    #- SCRAPE_INTERVAL=10
+    volumes:
+        - ./config.ini:/app/config.ini
+
 
 ### config examples for future extensions
   #  volumes:
