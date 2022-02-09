@@ -18,6 +18,8 @@ http://www.steves-internet-guide.com/into-mqtt-python-client/
 
 https://github.com/svijee/kostal-dataexporter (for cotainerization)
 
+extensive refactoring was of the service was based on
+https://github.com/karrot-dev/fritzinfluxdb
 
 
 ## Setup
@@ -30,24 +32,10 @@ Feel free to enhance and contribute!
 As a first step, try to get access with the user credentials to the Inverter frontend with the following Link from your browser:
 http://<KOSTAL_HOST>/index.fhtml
 
-### Set environment variables with the relevant details (e.g. via docker-compose)
-* For Interface to KOSTAL Inverter
-  * `KOSTAL_USERNAME`= `"<pvserver>"`
-  * `KOSTAL_PASSWORD`= `"<your_password>"`
-  * `KOSTAL_HOST`= `"<IP-address>"`
-* For MQTT Broker:
-  * `MQTT_TOPIC` = `"KOSTAL"`
-  * `MQTT_HOST` =`"127.0.0.1"`
-  * `MQTT_USERNAME`=`<your_username>`  < Runs currently without authentification!
-  * `MQTT_PASSWORD`=`<your_password>`  < Runs currently without authentification!
+### Add credentials to the *config.ini*-file
 
-### Internal variables, that can be easily added to the environment variables as well:  
-  * `MQTT_PORT`=`1883`
-  * `MQTT_CLIENT_ID`=`""`
-  * `MQTT_KEEPALIVE`=`60`
-  * `MQTT_WILL`=`None`
-  * `MQTT_TLS`=`None`
-  * `SCRAPE_INTERVAL`
+`cp config_template.ini config.ini`
+add all the required configuration settings to your *config.ini*-file
 
 ### create docker container
 building the container
@@ -62,6 +50,8 @@ building the container with docker-compose
 
 
 There's also a Docker Image available on [Docker Hub](https://hub.docker.com/repository/docker/wolfi82/kostal2mqtt).
+Note: The Docker-Container runs pretty stable on a amd64 acrchitecture. For arm architectures such as Raspberry Pi, the container is not yet running.
+in the *Dockerfile* you might ùncomment `FROM arm32v7/python:3.8-slim-buster` and give it a try.
 
 ## Description or the runtime sequence
 - get data
@@ -70,7 +60,7 @@ There's also a Docker Image available on [Docker Hub](https://hub.docker.com/rep
 - publish message
 
 ## Missing features:
-- exception handling  **not yet implemented**
+- exception handling  **implemented only rudimentary, enhancements are on my todo-list**
   - connection errors
     - route to PV
     - route to MQTT Broker
@@ -81,7 +71,6 @@ There's also a Docker Image available on [Docker Hub](https://hub.docker.com/rep
 ## Problems to be solved:
 - Docker container environment ==> 
 -  how to make sure that the latest lib is used?
-- container stops with "exit code 1" after almost any issue ==> the solution shall be robust against any external connectivity problems such as a restart of another instance of loss of communication
 - runtime monitoring shall provide (detailed) information on the issue causing the container to break.
 
 ## use cases for data consumption

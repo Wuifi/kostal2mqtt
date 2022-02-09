@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#user specific config including login credentials
+config.ini
+backup/
+
 # C extensions
 *.so
 
