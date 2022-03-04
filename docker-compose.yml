@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     user: "0"
     volumes:
-        - ./config.ini:/app/config.ini
+        - ./:/app/
 
 
 ### config examples for future extensions
