@@ -33,20 +33,19 @@ As a first step, try to get access with the user credentials to the Inverter fro
 http://<KOSTAL_HOST>/index.fhtml
 
 ### Add credentials to the *config.ini*-file
-
-`cp config_template.ini config.ini`
-add all the required configuration settings to your *config.ini*-file
+copy the file with the cmd `cp config_template.ini config.ini`
+and adjust all the required configuration settings to your *config.ini*-file
 
 ### create docker container
 building the container
-`sudo docker build -t kostal2mqtt .`
+`docker build -t kostal2mqtt:latest .`
 
-`sudo docker run kostal2mqtt`
+`docker run kostal2mqtt:latest kostal2mqtt:latest`
 
 building the container with docker-compose
 `docker-compose up`
 
- * Run `python kostal2mqtt.py`
+ * Run `python3 kostal2mqtt.py`
 
 
 There's also a Docker Image available on [Docker Hub](https://hub.docker.com/repository/docker/wolfi82/kostal2mqtt).
