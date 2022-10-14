@@ -137,7 +137,7 @@ def raw2json(raw):
             state_binary=None
             state_flag=0
         debug_str="OK"
-        state_flag=1    
+   
     except (ValueError, TypeError) as e:
         
         act = None
@@ -172,7 +172,7 @@ def raw2json(raw):
         phase3_power = None
         phase3_state = None
         
-        debug_str='Received Data: "%s" LOG: %s' % (raw, str(e))
+        debug_str='Problem with received Data: "%s" LOG: %s' % (raw, str(e))
         logging.error(debug_str)
         #print(debug_str)
 
